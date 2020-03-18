@@ -14,3 +14,7 @@ html, body, #root, .app {
   display: flex;
   background-color: #36454f;
 }
+
+.main {
+  flex: 9;
+}   

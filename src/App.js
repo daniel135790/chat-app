@@ -7,13 +7,15 @@ import './App.css';
 const App = () => (
   <div className="app">
     <Sidebar />
-    <Router>
-      <Switch>
-        <Route exact path="/" component={Pages.Main} />
-        <Route path="/chat" component={Pages.Main} />
-        <Route path="*" component={Pages.NotFound} />
-      </Switch>
-    </Router>
+    <div className="main">
+      <Router>
+        <Switch>
+          <Route exact path="/" component={Pages.Home} />
+          <Route path="/chat" component={Pages.Home} />
+          <Route path="*" component={Pages.NotFound} />
+        </Switch>
+      </Router>
+    </div>
   </div>
 );
 

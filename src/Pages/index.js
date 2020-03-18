@@ -1,8 +1,8 @@
 import NotFound from './NotFound';
-import Main from './Main';
+import Home from './Home';
 
 
 export {
-    Main,
+    Home,
     NotFound
 };

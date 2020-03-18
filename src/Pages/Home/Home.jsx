@@ -1,10 +1,9 @@
 import React from 'react';
-import './main.css';
 
-const Main = () => (
+const Home = () => (
     <div className="main">
         Chat application
     </div>
 );
 
-export default Main;
+export default Home;
