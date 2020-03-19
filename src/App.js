@@ -6,16 +6,18 @@ import './App.css';
 
 const App = () => (
   <div className="app">
-    <Sidebar />
-    <div className="main">
-      <Router>
+    <Router>
+      <Sidebar />
+
+      <div className="main">
         <Switch>
           <Route exact path="/" component={Pages.Home} />
-          <Route path="/chats" component={Pages.Chats} />
+          <Route path="/home" component={Pages.Home} />
+          <Route path="/chat" component={Pages.Chats} />
           <Route path="*" component={Pages.NotFound} />
         </Switch>
-      </Router>
-    </div>
+      </div>
+    </Router>
   </div>
 );
 

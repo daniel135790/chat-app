@@ -1,12 +1,24 @@
-import React from 'react';
+import React, {useState} from 'react';
+import {useHistory} from 'react-router-dom';
 import {Drawer, ThemeProvider} from '@material-ui/core';
 import {List, ListItem, ListItemAvatar, ListItemText} from '@material-ui/core';
 import ChatIcon from '@material-ui/icons/Chat';
+import HomeIcon from '@material-ui/icons/Home';
 import useStyles from './styles';
 import theme from './theme';
 
 const Sidebar = () => {
     const styles = useStyles();
+    const history = useHistory();
+
+    const [selectedItem,
+        setSelectedItem] = useState('Home');
+
+    const onItemClick = key => () => {
+        console.log(key);
+        setSelectedItem(key);
+        history.push(key)
+    };
 
     return (
         <ThemeProvider theme={theme}>
@@ -16,19 +28,19 @@ const Sidebar = () => {
                 paper: styles.paper
             }}>
                 <List>
-                    <ListItem selected button key={1}>
+                    <ListItem
+                        onClick={onItemClick('Home')}
+                        selected={selectedItem === 'Home'}
+                        button>
                         <ListItemAvatar>
-                            <ChatIcon />
+                            <HomeIcon />
                         </ListItemAvatar>
-                        <ListItemText primary="Chat" />
+                        <ListItemText primary="Home" />
                     </ListItem>
-                    <ListItem button key={2}>
-                        <ListItemAvatar>
-                            <ChatIcon />
-                        </ListItemAvatar>
-                        <ListItemText primary="Chat" />
-                    </ListItem>
-                    <ListItem button key={3}>
+                    <ListItem
+                        onClick={onItemClick('Chat')}
+                        selected={selectedItem === 'Chat'}
+                        button>
                         <ListItemAvatar>
                             <ChatIcon />
                         </ListItemAvatar>
