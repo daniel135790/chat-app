@@ -7,7 +7,7 @@ const ChatsList = () => {
     return (
         <div>
             {chats.map((chat) => (
-                <div>
+                <div key={chat.timestamp}>
                     <div>
                         {chat.from}
                     </div>

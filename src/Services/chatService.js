@@ -4,8 +4,10 @@ const connect = (addr) => {
     webSocket = new WebSocket(addr);
 }
 
+const isConnected = () => webSocket !== null && webSocket.readyState === WebSocket.OPEN;
+
 const onConnect = (callback) => {
-    if (webSocket === null) {
+    if (isConnected()) {
         return false;
     }
 
@@ -14,7 +16,7 @@ const onConnect = (callback) => {
 };
 
 const onDisconnect = (callback) => {
-    if (webSocket === null) {
+    if (!isConnected) {
         return false;
     }
 
@@ -23,25 +25,25 @@ const onDisconnect = (callback) => {
 };
 
 const onMessageReceived = (callback) => {
-    if (webSocket === null) {
+    if (!isConnected) {
         return false;
     }
 
-    webSocket.onmessage = callback;
+    webSocket.onmessage = event => callback(JSON.parse(event.data));
     return true;
 };
 
-const send = (msg)=> {
-    if (webSocket === null) {
+const send = (msg) => {
+    if (!isConnected) {
         return false;
     }
 
-    webSocket.send(msg);
+    webSocket.send(JSON.stringify(msg));
     return true;
 };
 
 export default {
-    onConnect, 
+    onConnect,
     onDisconnect,
     onMessageReceived,
     send,
