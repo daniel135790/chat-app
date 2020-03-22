@@ -17,4 +17,5 @@ html, body, #root, .app {
 
 .main {
   flex: 9;
+  display: flex;
 }   

@@ -1,13 +1,15 @@
 let webSocket = null;
 
-const connect = (addr) => {
+const connect = (addr, onConnect, onMessage) => {
     webSocket = new WebSocket(addr);
+    onConnected(onConnect);
+    onMessageReceived(onMessage);
 }
 
-const isConnected = () => webSocket !== null && webSocket.readyState === WebSocket.OPEN;
+const validateConnected = () => webSocket !== null && webSocket.readyState === WebSocket.OPEN;
 
-const onConnect = (callback) => {
-    if (isConnected()) {
+const onConnected = (callback) => {
+    if (!validateConnected()) {
         return false;
     }
 
@@ -16,7 +18,7 @@ const onConnect = (callback) => {
 };
 
 const onDisconnect = (callback) => {
-    if (!isConnected) {
+    if (!validateConnected()) {
         return false;
     }
 
@@ -25,7 +27,7 @@ const onDisconnect = (callback) => {
 };
 
 const onMessageReceived = (callback) => {
-    if (!isConnected) {
+    if (webSocket === null) {
         return false;
     }
 
@@ -34,7 +36,7 @@ const onMessageReceived = (callback) => {
 };
 
 const send = (msg) => {
-    if (!isConnected) {
+    if (!validateConnected()) {
         return false;
     }
 
@@ -43,9 +45,10 @@ const send = (msg) => {
 };
 
 export default {
-    onConnect,
+    onConnected,
     onDisconnect,
     onMessageReceived,
     send,
-    connect
+    connect,
+    validateConnected
 };

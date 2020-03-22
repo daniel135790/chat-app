@@ -7,23 +7,23 @@ const ChatsProvider = ({children}) => {
     const [chats,
         setChats] = useState([]);
 
-    const addChat = useCallback((message) => {
-        setChats([
-            ...chats,
+    const addChatMessage = useCallback((message) => {
+        setChats(currentChats => [
+            ...currentChats,
             message
         ]);
-    }, [chats, setChats]);
+    }, [setChats]);
 
     useEffect(() => {
-        chatService.connect('ws://localhost:8080');
-        chatService.onMessageReceived(addChat);
-    }, [addChat]);
+        if (!chatService.validateConnected()) {
+            chatService.connect('ws://localhost:8080', null, addChatMessage);
+        }
+    }, [addChatMessage]);
 
     return (
         <ChatsContext.Provider
             value={{
-            chats,
-            addChat
+            chats
         }}>
             {children}
         </ChatsContext.Provider>

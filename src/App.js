@@ -8,12 +8,11 @@ const App = () => (
   <div className="app">
     <Router>
       <Sidebar />
-
       <div className="main">
         <Switch>
           <Route exact path="/" component={Pages.Home} />
           <Route path="/home" component={Pages.Home} />
-          <Route path="/chat" component={Pages.Chats} />
+          <Route path="/chat" component={Pages.Chat} />
           <Route path="*" component={Pages.NotFound} />
         </Switch>
       </div>

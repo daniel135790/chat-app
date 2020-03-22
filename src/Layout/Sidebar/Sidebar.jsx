@@ -15,7 +15,6 @@ const Sidebar = () => {
         setSelectedItem] = useState('Home');
 
     const onItemClick = key => () => {
-        console.log(key);
         setSelectedItem(key);
         history.push(key)
     };

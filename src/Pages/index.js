@@ -1,9 +1,9 @@
 import NotFound from './NotFound';
 import Home from './Home';
-import Chats from './Chats';
+import Chat from './Chat';
 
 export {
     Home,
     NotFound,
-    Chats
+    Chat
 };
