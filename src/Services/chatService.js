@@ -6,6 +6,11 @@ const connect = (addr, onConnect, onMessage) => {
     onMessageReceived(onMessage);
 }
 
+const disconnect = () => {
+    webSocket.close();
+    webSocket = null;
+};
+
 const validateConnected = () => webSocket !== null && webSocket.readyState === WebSocket.OPEN;
 
 const onConnected = (callback) => {
@@ -50,5 +55,6 @@ export default {
     onMessageReceived,
     send,
     connect,
+    disconnect,
     validateConnected
 };

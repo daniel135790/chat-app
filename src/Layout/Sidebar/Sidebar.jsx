@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {useHistory} from 'react-router-dom';
+import React, {useState, useEffect} from 'react';
+import {useHistory, useLocation} from 'react-router-dom';
 import {Drawer, ThemeProvider} from '@material-ui/core';
 import {List, ListItem, ListItemAvatar, ListItemText} from '@material-ui/core';
 import ChatIcon from '@material-ui/icons/Chat';
@@ -10,14 +10,19 @@ import theme from './theme';
 const Sidebar = () => {
     const styles = useStyles();
     const history = useHistory();
+    const location = useLocation();
 
     const [selectedItem,
-        setSelectedItem] = useState('Home');
+        setSelectedItem] = useState('/home');
 
     const onItemClick = key => () => {
         setSelectedItem(key);
         history.push(key)
     };
+
+    useEffect(() => {
+        setSelectedItem(location.pathname)
+    }, [location]);
 
     return (
         <ThemeProvider theme={theme}>
@@ -28,8 +33,8 @@ const Sidebar = () => {
             }}>
                 <List>
                     <ListItem
-                        onClick={onItemClick('Home')}
-                        selected={selectedItem === 'Home'}
+                        onClick={onItemClick('/home')}
+                        selected={selectedItem === '/home' || selectedItem === '/'}
                         button>
                         <ListItemAvatar>
                             <HomeIcon />
@@ -37,8 +42,8 @@ const Sidebar = () => {
                         <ListItemText primary="Home" />
                     </ListItem>
                     <ListItem
-                        onClick={onItemClick('Chat')}
-                        selected={selectedItem === 'Chat'}
+                        onClick={onItemClick('/chat')}
+                        selected={selectedItem === '/chat'}
                         button>
                         <ListItemAvatar>
                             <ChatIcon />

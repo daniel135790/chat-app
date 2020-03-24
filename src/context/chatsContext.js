@@ -14,16 +14,24 @@ const ChatsProvider = ({children}) => {
         ]);
     }, [setChats]);
 
+    const onMessageReceived = message => addChatMessage({
+        ...message,
+        isMe: false
+    });
+
     useEffect(() => {
         if (!chatService.validateConnected()) {
-            chatService.connect('ws://localhost:8080', null, addChatMessage);
+            chatService.connect('ws://localhost:8080', null, onMessageReceived);
         }
+
+        return () => chatService.disconnect();
     }, [addChatMessage]);
 
     return (
         <ChatsContext.Provider
             value={{
-            chats
+            chats,
+            addChatMessage
         }}>
             {children}
         </ChatsContext.Provider>
