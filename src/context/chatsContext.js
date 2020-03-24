@@ -23,7 +23,7 @@ const ChatsProvider = ({children}) => {
 
     useEffect(() => {
         if (!chatService.validateConnected()) {
-            chatService.connect('ws://ds-chat2-server.herokuapp.com:8080', null, onMessageReceived);
+            chatService.connect('wss://ds-chat2-server.herokuapp.com', null, onMessageReceived);
         }
 
         return () => chatService.disconnect();
