@@ -14,10 +14,12 @@ const ChatsProvider = ({children}) => {
         ]);
     }, [setChats]);
 
-    const onMessageReceived = message => addChatMessage({
-        ...message,
-        isMe: false
-    });
+    const onMessageReceived = useCallback((message) => {
+        addChatMessage({
+            ...message,
+            isMe: false
+        });
+    }, [addChatMessage]);
 
     useEffect(() => {
         if (!chatService.validateConnected()) {
@@ -25,7 +27,7 @@ const ChatsProvider = ({children}) => {
         }
 
         return () => chatService.disconnect();
-    }, [addChatMessage]);
+    }, [addChatMessage, onMessageReceived]);
 
     return (
         <ChatsContext.Provider

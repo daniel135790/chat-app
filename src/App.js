@@ -1,6 +1,5 @@
 import React from 'react';
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
-import {AppBar, Toolbar, TextField} from '@material-ui/core'
 import Sidebar from './Layout/Sidebar';
 import UserSettingsProvider from './context/userSettingsContext';
 import ChatsProvider from './context/chatsContext';
