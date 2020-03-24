@@ -4,19 +4,23 @@ import Sidebar from './Layout/Sidebar';
 import * as Pages from './Pages';
 import './App.css';
 
-const App = () => (
-  <div className="app">
-    <Sidebar />
-    <div className="main">
-      <Router>
-        <Switch>
-          <Route exact path="/" component={Pages.Home} />
-          <Route path="/chat" component={Pages.Home} />
-          <Route path="*" component={Pages.NotFound} />
-        </Switch>
-      </Router>
-    </div>
-  </div>
-);
+const App = () => {
 
+  console.log(process.env);
+
+  return (
+    <div className="app">
+      <Sidebar />
+      <div className="main">
+        <Router>
+          <Switch>
+            <Route exact path="/" component={Pages.Home} />
+            <Route path="/chat" component={Pages.Home} />
+            <Route path="*" component={Pages.NotFound} />
+          </Switch>
+        </Router>
+      </div>
+    </div>
+  );
+};
 export default App;
