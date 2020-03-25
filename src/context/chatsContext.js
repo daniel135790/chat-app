@@ -1,5 +1,6 @@
 import React, {createContext, useState, useEffect, useCallback} from 'react';
 import {chatService} from '../Services';
+import config from './../config';
 
 export const ChatsContext = createContext();
 
@@ -23,7 +24,7 @@ const ChatsProvider = ({children}) => {
 
     useEffect(() => {
         if (!chatService.validateConnected()) {
-            chatService.connect('wss://ds-chat2-server.herokuapp.com', null, onMessageReceived);
+            chatService.connect(config.SERVER_URL, null, onMessageReceived);
         }
 
         return () => chatService.disconnect();
