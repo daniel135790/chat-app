@@ -4,6 +4,16 @@
     flex-direction: column;
 }
 
-.chat-page .actions {
+.chat-page .actions-wrapper {
     display: flex;
+    padding: 2vh 2vw;
+}
+
+.chat-page .actions {
+    flex: 1;
+    display: flex;
+    background-color: #131a1f;
+    border-radius: 40px;
+    color: #fff;
+    padding: 0 40px;        
 }
