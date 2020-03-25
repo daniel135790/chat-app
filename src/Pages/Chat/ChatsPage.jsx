@@ -1,9 +1,9 @@
-import React, {useContext, useEffect} from 'react';
-import {useHistory} from 'react-router-dom';
-import {chatService} from '../../Services';
-import {UserSettingsContext} from '../../context/userSettingsContext';
-import {ChatsContext} from '../../context/chatsContext';
-import {ChatsList, MessageInput} from './Components';
+import React, { useContext, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import { chatService } from '../../Services';
+import { UserSettingsContext } from '../../context/userSettingsContext';
+import { ChatsContext } from '../../context/chatsContext';
+import { ChatsList, MessageInput } from './Components';
 import './chat-page.css';
 
 const ChatsPage = () => {

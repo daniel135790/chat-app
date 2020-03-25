@@ -1,5 +1,5 @@
-import React, {useContext} from 'react';
-import {ChatsContext} from '../../../../context/chatsContext';
+import React, { useContext } from 'react';
+import { ChatsContext } from '../../../../context/chatsContext';
 import ChatMessage from '../ChatMessage';
 import './chats-list.css';
 

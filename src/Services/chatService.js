@@ -4,7 +4,7 @@ const connect = (addr, onConnect, onMessage) => {
     webSocket = new WebSocket(addr);
     onConnected(onConnect);
     onMessageReceived(onMessage);
-}
+};
 
 const disconnect = () => {
     webSocket.close();

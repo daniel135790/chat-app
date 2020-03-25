@@ -1,5 +1,5 @@
-import React, {createContext, useState, useEffect, useCallback} from 'react';
-import {chatService} from '../Services';
+import React, { createContext, useCallback, useEffect, useState } from 'react';
+import { chatService } from '../Services';
 
 export const ChatsContext = createContext();
 
@@ -32,9 +32,9 @@ const ChatsProvider = ({children}) => {
     return (
         <ChatsContext.Provider
             value={{
-            chats,
-            addChatMessage
-        }}>
+                chats,
+                addChatMessage
+            }}>
             {children}
         </ChatsContext.Provider>
     );

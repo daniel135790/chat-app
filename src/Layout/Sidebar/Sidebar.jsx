@@ -1,7 +1,6 @@
-import React, {useState, useEffect} from 'react';
-import {useHistory, useLocation} from 'react-router-dom';
-import {Drawer, ThemeProvider} from '@material-ui/core';
-import {List, ListItem, ListItemAvatar, ListItemText} from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
+import { Drawer, List, ListItem, ListItemAvatar, ListItemText, ThemeProvider } from '@material-ui/core';
 import ChatIcon from '@material-ui/icons/Chat';
 import HomeIcon from '@material-ui/icons/Home';
 import useStyles from './styles';
@@ -29,8 +28,8 @@ const Sidebar = () => {
             <Drawer
                 variant="permanent"
                 classes={{
-                paper: styles.paper
-            }}>
+                    paper: styles.paper
+                }}>
                 <List>
                     <ListItem
                         onClick={onItemClick('/home')}
@@ -54,6 +53,6 @@ const Sidebar = () => {
             </Drawer>
         </ThemeProvider>
     );
-}
+};
 
 export default Sidebar;
