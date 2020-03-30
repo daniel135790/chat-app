@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Drawer, List, ListItem, ListItemAvatar, ListItemText, ThemeProvider } from '@material-ui/core';
-import ChatIcon from '@material-ui/icons/Chat';
-import HomeIcon from '@material-ui/icons/Home';
+import { Chat as ChatIcon, Home as HomeIcon } from '@material-ui/icons';
 import useStyles from './styles';
 import theme from './theme';
 

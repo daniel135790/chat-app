@@ -4,16 +4,16 @@ import config from './../config';
 
 export const ChatsContext = createContext();
 
-const ChatsProvider = ({children}) => {
-    const [chats,
-        setChats] = useState([]);
+const ChatsProvider = ({ children }) => {
+    const [chatMessages,
+        setChatMessages] = useState([]);
 
     const addChatMessage = useCallback((message) => {
-        setChats(currentChats => [
+        setChatMessages(currentChats => [
             ...currentChats,
             message
         ]);
-    }, [setChats]);
+    }, [setChatMessages]);
 
     const onMessageReceived = useCallback((message) => {
         addChatMessage({
@@ -33,7 +33,7 @@ const ChatsProvider = ({children}) => {
     return (
         <ChatsContext.Provider
             value={{
-                chats,
+                chats: chatMessages,
                 addChatMessage
             }}>
             {children}
