@@ -1,34 +1,48 @@
-import React from 'react';
-import {Drawer, ThemeProvider} from '@material-ui/core';
-import {List, ListItem, ListItemAvatar, ListItemText} from '@material-ui/core';
-import ChatIcon from '@material-ui/icons/Chat';
+import React, { useEffect, useState } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
+import { Drawer, List, ListItem, ListItemAvatar, ListItemText, ThemeProvider } from '@material-ui/core';
+import { Chat as ChatIcon, Home as HomeIcon } from '@material-ui/icons';
 import useStyles from './styles';
 import theme from './theme';
 
 const Sidebar = () => {
     const styles = useStyles();
+    const history = useHistory();
+    const location = useLocation();
+
+    const [selectedItem,
+        setSelectedItem] = useState('/home');
+
+    const onItemClick = key => () => {
+        setSelectedItem(key);
+        history.push(key)
+    };
+
+    useEffect(() => {
+        setSelectedItem(location.pathname)
+    }, [location]);
 
     return (
         <ThemeProvider theme={theme}>
             <Drawer
                 variant="permanent"
                 classes={{
-                paper: styles.paper
-            }}>
+                    paper: styles.paper
+                }}>
                 <List>
-                    <ListItem selected button key={1}>
+                    <ListItem
+                        onClick={onItemClick('/home')}
+                        selected={selectedItem === '/home' || selectedItem === '/'}
+                        button>
                         <ListItemAvatar>
-                            <ChatIcon />
+                            <HomeIcon />
                         </ListItemAvatar>
-                        <ListItemText primary="Chat" />
+                        <ListItemText primary="Home" />
                     </ListItem>
-                    <ListItem button key={2}>
-                        <ListItemAvatar>
-                            <ChatIcon />
-                        </ListItemAvatar>
-                        <ListItemText primary="Chat" />
-                    </ListItem>
-                    <ListItem button key={3}>
+                    <ListItem
+                        onClick={onItemClick('/chat')}
+                        selected={selectedItem === '/chat'}
+                        button>
                         <ListItemAvatar>
                             <ChatIcon />
                         </ListItemAvatar>
@@ -38,6 +52,6 @@ const Sidebar = () => {
             </Drawer>
         </ThemeProvider>
     );
-}
+};
 
 export default Sidebar;
