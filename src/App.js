@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Sidebar from './Layout/Sidebar';
-import UserSettingsProvider from './context/userSettingsContext';
+import StoreProvider from './context/storeContext';
 import * as Pages from './Pages';
 import { UserRoute } from './Routes';
 import './App.css';
@@ -9,7 +9,7 @@ import './App.css';
 const App = () => (
     <div className="app">
         <Router>
-            <UserSettingsProvider>
+            <StoreProvider>
                 <Sidebar />
                 <div className="main">
                     <Switch>
@@ -20,7 +20,7 @@ const App = () => (
                         <Route path="*" component={Pages.NotFound} />
                     </Switch>
                 </div>
-            </UserSettingsProvider>
+            </StoreProvider>
         </Router>
     </div>
 );

@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useCallback, useEffect, useState } from 'react';
 import { chatService } from '../Services';
-import { UserSettingsContext } from './userSettingsContext';
+import { StoreContext } from './storeContext';
 import config from './../config';
 
 export const ChatsContext = createContext();
@@ -9,8 +9,8 @@ const ChatsProvider = ({ children }) => {
     const [chatMessages,
         setChatMessages] = useState([]);
 
-    const {userSettings} = useContext(UserSettingsContext);
-    const {username} = userSettings;
+    const { dispatch, state } = useContext(StoreContext);
+    const { username } = state;
 
     const addChatMessage = useCallback((message) => {
         setChatMessages(currentChats => [
@@ -28,9 +28,17 @@ const ChatsProvider = ({ children }) => {
         }
 
         if (message.type === 'new-user') {
+            const { username, userId } = message;
+            dispatch({
+                type: 'ADD_USER',
+                payload: {
+                    username,
+                    id: userId
+                }
+            });
             console.log('new user: ' + message.username)
         }
-    }, [addChatMessage]);
+    }, [addChatMessage, dispatch]);
 
     useEffect(() => {
         if (!chatService.validateConnected()) {

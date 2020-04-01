@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Button, TextField } from '@material-ui/core'
 import { useHistory } from 'react-router-dom';
-import { UserSettingsContext } from '../../context/userSettingsContext';
+import { StoreContext } from '../../context/storeContext';
 import useStyles from './styles';
 import './user-settings-page.css';
 
@@ -10,12 +10,17 @@ const UserSettingsPage = () => {
     const history = useHistory();
     const [username,
         setUsername] = useState('');
-    const {applyToSettings} = useContext(UserSettingsContext);
+
+    const { dispatch } = useContext(StoreContext);
 
     const onUsernameChange = e => setUsername(e.target.value);
 
     const onSave = () => {
-        applyToSettings({username});
+        dispatch({
+            type: 'SET_USERNAME',
+            payload: username
+        });
+        
         history.push('/chat');
     };
 

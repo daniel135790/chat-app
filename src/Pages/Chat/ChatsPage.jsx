@@ -1,16 +1,16 @@
 import React, { useContext } from 'react';
 import { ChatsContext } from '../../context/chatsContext';
-import { UserSettingsContext } from '../../context/userSettingsContext';
+import { StoreContext } from '../../context/storeContext';
 import { chatService } from '../../Services';
 import { ChatsList, MessageInput } from './Components';
 import './chat-page.css';
 
 const ChatsPage = () => {
-    const {userSettings} = useContext(UserSettingsContext);
+    const {state} = useContext(StoreContext);
     const {addChatMessage} = useContext(ChatsContext);
 
     const sendMessage = (messageContent) => {
-        const {username} = userSettings;
+        const {username} = state;
 
         const message = {
             type: 'message',
