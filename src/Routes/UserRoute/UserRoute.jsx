@@ -7,7 +7,7 @@ const UserRoute = ({ component: Component, ...rest }) => {
 
     return (
         <Route {...rest} render={(props) => (
-            (state.username)
+            (state.currentUser.username)
                 ? <Component {...props} />
                 : <Redirect to="/settings" />
         )} />

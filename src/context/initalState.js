@@ -1,5 +1,8 @@
 const initialState = {
-    username: null,
+    currentUser: {
+        username: null,
+        status: 'offline'
+    },
     users: []
 };
 

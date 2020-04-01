@@ -10,7 +10,8 @@ const ChatsProvider = ({ children }) => {
         setChatMessages] = useState([]);
 
     const { dispatch, state } = useContext(StoreContext);
-    const { username } = state;
+    const { currentUser } = state;
+    const { username } = currentUser;
 
     const addChatMessage = useCallback((message) => {
         setChatMessages(currentChats => [

@@ -1,7 +1,7 @@
 const storeReducer = (state, action) => {
     switch (action.type) {
-        case 'SET_USERNAME':
-            return { ...state, username: action.payload }
+        case 'SET_CURRENT_USER':
+            return { ...state, currentUser: action.payload }
         case 'SET_USERS':
             return { ...state, users: action.payload }
         case 'ADD_USER':

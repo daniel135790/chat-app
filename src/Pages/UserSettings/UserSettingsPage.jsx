@@ -16,11 +16,8 @@ const UserSettingsPage = () => {
     const onUsernameChange = e => setUsername(e.target.value);
 
     const onSave = () => {
-        dispatch({
-            type: 'SET_USERNAME',
-            payload: username
-        });
-        
+        dispatch({ type: 'SET_CURRENT_USER', payload: {username, status: 'online'} });
+
         history.push('/chat');
     };
 

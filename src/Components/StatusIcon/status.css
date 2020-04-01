@@ -1,0 +1,13 @@
+.status {
+    width: 15px;
+    height: 15px;
+    border-radius: 15px;
+}
+
+.status[status="away"] {
+    background-color: orange;
+}
+
+.status[status="online"] {
+    background-color: green;
+}

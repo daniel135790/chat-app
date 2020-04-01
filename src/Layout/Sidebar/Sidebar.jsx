@@ -3,6 +3,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { Drawer, List, ListItem, ListItemAvatar, ListItemText, ThemeProvider } from '@material-ui/core';
 import { Chat as ChatIcon, Home as HomeIcon } from '@material-ui/icons';
 import { UsersList } from "../../Components";
+import MyStatus from '../../Components/MyStatus';
 import useStyles from './styles';
 import theme from './theme';
 
@@ -30,6 +31,7 @@ const Sidebar = () => {
                 classes={{
                     paper: styles.paper
                 }}>
+                <MyStatus />
                 <List>
                     <ListItem
                         onClick={onItemClick('/home')}
