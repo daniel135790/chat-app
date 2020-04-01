@@ -1,7 +1,9 @@
+import { USER_STATUS } from '../Constants';
+
 const initialState = {
     currentUser: {
         username: null,
-        status: 'offline'
+        status: USER_STATUS.OFFLINE
     },
     users: []
 };

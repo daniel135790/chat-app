@@ -3,6 +3,7 @@ import { ChatsContext } from '../../context/chatsContext';
 import { StoreContext } from '../../context/storeContext';
 import { chatService } from '../../Services';
 import { ChatsList, MessageInput } from './Components';
+import { USER_STATUS } from '../../Constants';
 import IdleTimer from 'react-idle-timer'
 import './chat-page.css';
 
@@ -30,11 +31,11 @@ const ChatsPage = () => {
             type: 'SET_CURRENT_USER',
             payload: {
                 ...state.currentUser,
-                status: 'away'
+                status: USER_STATUS.AWAY
             }
         });
 
-        chatService.updateStatus('away');
+        chatService.updateStatus(USER_STATUS.AWAY);
     };
 
     const onUserActive = () => {
@@ -42,11 +43,11 @@ const ChatsPage = () => {
             type: 'SET_CURRENT_USER',
             payload: {
                 ...state.currentUser,
-                status: 'online'
+                status: USER_STATUS.ONLINE
             }
         });
-        
-        chatService.updateStatus('online');
+
+        chatService.updateStatus(USER_STATUS.ONLINE);
     }
 
     return (
