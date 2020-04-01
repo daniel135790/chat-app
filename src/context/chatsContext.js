@@ -27,13 +27,26 @@ const ChatsProvider = ({ children }) => {
             });
         }
 
+        if (message.type === 'users-list') {
+            const { users } = message;
+            dispatch({
+                type: 'SET_USERS',
+                payload: users.map(user => ({
+                    id: user.userId,
+                    username: user.username,
+                    status: user.status
+                }))
+            });
+        }
+
         if (message.type === 'user-joined') {
-            const { username, userId } = message;
+            const { username, userId, status } = message;
             dispatch({
                 type: 'ADD_USER',
                 payload: {
                     username,
-                    id: userId
+                    id: userId,
+                    status
                 }
             });
         }
@@ -45,6 +58,18 @@ const ChatsProvider = ({ children }) => {
                 payload: userId
             });
         }
+
+        if (message.type === 'user-status-change') {
+            const { userId, status } = message;
+            dispatch({
+                type: 'SET_USER_STATUS',
+                payload: {
+                    id: userId,
+                    status
+                }
+            });
+        }
+
     }, [addChatMessage, dispatch]);
 
     useEffect(() => {
@@ -52,7 +77,7 @@ const ChatsProvider = ({ children }) => {
             chatService.connect(config.SERVER_URL, username, null, onMessageReceived);
         }
 
-        return () => chatService.disconnect(username);
+        return () => chatService.disconnect();
     }, [username, addChatMessage, onMessageReceived]);
 
     return (

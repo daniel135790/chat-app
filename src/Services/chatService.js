@@ -12,9 +12,16 @@ const connect = (addr, username, onConnect, onMessage) => {
     onMessageReceived(onMessage);
 };
 
-const disconnect = (username) => {
+const disconnect = () => {
     webSocket.close();
     webSocket = null;
+};
+
+const updateStatus = (status) => {
+    send({
+        type: 'user-status-change',
+        status
+    });
 };
 
 const validateConnected = () => webSocket !== null && webSocket.readyState === WebSocket.OPEN;
@@ -58,6 +65,7 @@ const send = (msg) => {
 export default {
     onConnected,
     onDisconnect,
+    updateStatus,
     onMessageReceived,
     send,
     connect,

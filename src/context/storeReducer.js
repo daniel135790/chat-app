@@ -2,6 +2,8 @@ const storeReducer = (state, action) => {
     switch (action.type) {
         case 'SET_USERNAME':
             return { ...state, username: action.payload }
+        case 'SET_USERS':
+            return { ...state, users: action.payload }
         case 'ADD_USER':
             return {
                 ...state,
@@ -14,8 +16,10 @@ const storeReducer = (state, action) => {
             };
         case 'SET_USER_STATUS':
             const usersCopy = state.users;
-            const userToUpdate = usersCopy.find(user => user.id === action.payload.id);
-            userToUpdate.status = action.payload.status;
+            const { id: userId, status } = action.payload;
+
+            const userToUpdate = usersCopy.find(user => user.id === userId);
+            userToUpdate.status = status;
 
             return { ...state, users: usersCopy };
         default:
