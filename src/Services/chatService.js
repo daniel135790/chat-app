@@ -3,10 +3,7 @@ let webSocket = null;
 const connect = (addr, username, onConnect, onMessage) => {
     webSocket = new WebSocket(addr);
     onConnected(() => {
-        send({
-            type: 'user-connect',
-            username
-        });
+        send({ type: 'user-connect', username });
 
         if (onConnect) {
             onConnect();
@@ -15,7 +12,7 @@ const connect = (addr, username, onConnect, onMessage) => {
     onMessageReceived(onMessage);
 };
 
-const disconnect = () => {
+const disconnect = (username) => {
     webSocket.close();
     webSocket = null;
 };

@@ -27,7 +27,7 @@ const ChatsProvider = ({ children }) => {
             });
         }
 
-        if (message.type === 'new-user') {
+        if (message.type === 'user-joined') {
             const { username, userId } = message;
             dispatch({
                 type: 'ADD_USER',
@@ -36,7 +36,14 @@ const ChatsProvider = ({ children }) => {
                     id: userId
                 }
             });
-            console.log('new user: ' + message.username)
+        }
+
+        if (message.type === 'user-left') {
+            const { userId } = message;
+            dispatch({
+                type: 'REMOVE_USER',
+                payload: userId
+            });
         }
     }, [addChatMessage, dispatch]);
 
@@ -45,7 +52,7 @@ const ChatsProvider = ({ children }) => {
             chatService.connect(config.SERVER_URL, username, null, onMessageReceived);
         }
 
-        return () => chatService.disconnect();
+        return () => chatService.disconnect(username);
     }, [username, addChatMessage, onMessageReceived]);
 
     return (

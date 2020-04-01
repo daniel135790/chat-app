@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Drawer, List, ListItem, ListItemAvatar, ListItemText, ThemeProvider } from '@material-ui/core';
 import { Chat as ChatIcon, Home as HomeIcon } from '@material-ui/icons';
+import { UsersList } from "../../Components";
 import useStyles from './styles';
 import theme from './theme';
 
@@ -49,6 +50,7 @@ const Sidebar = () => {
                         <ListItemText primary="Chat" />
                     </ListItem>
                 </List>
+                <UsersList />
             </Drawer>
         </ThemeProvider>
     );
