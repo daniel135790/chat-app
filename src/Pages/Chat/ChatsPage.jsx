@@ -13,6 +13,7 @@ const ChatsPage = () => {
         const {username} = userSettings;
 
         const message = {
+            type: 'message',
             sender: username,
             timestamp: Date.now(),
             content: messageContent,

@@ -1,3 +1,3 @@
-import ChatsPage from './ChatsPage';
+import ChatsPageProviderWrapper from './ChatsPageProviderWrapper';
 
-export default ChatsPage;
+export default ChatsPageProviderWrapper;
