@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
 import { Route, Redirect } from 'react-router';
-import { UserSettingsContext } from '../../context/userSettingsContext';
+import { StoreContext } from '../../context/storeContext';
 
 const UserRoute = ({ component: Component, ...rest }) => {
-    const { userSettings } = useContext(UserSettingsContext);
+    const { state } = useContext(StoreContext);
 
     return (
         <Route {...rest} render={(props) => (
-            (userSettings && userSettings.username)
+            (state.currentUser.username)
                 ? <Component {...props} />
                 : <Redirect to="/settings" />
         )} />

@@ -1,5 +1,6 @@
-import React, { createContext, useCallback, useEffect, useState } from 'react';
+import React, { createContext, useContext, useCallback, useEffect, useState } from 'react';
 import { chatService } from '../Services';
+import { StoreContext } from './storeContext';
 import config from './../config';
 
 export const ChatsContext = createContext();
@@ -7,6 +8,10 @@ export const ChatsContext = createContext();
 const ChatsProvider = ({ children }) => {
     const [chatMessages,
         setChatMessages] = useState([]);
+
+    const { dispatch, state } = useContext(StoreContext);
+    const { currentUser } = state;
+    const { username } = currentUser;
 
     const addChatMessage = useCallback((message) => {
         setChatMessages(currentChats => [
@@ -16,19 +21,62 @@ const ChatsProvider = ({ children }) => {
     }, [setChatMessages]);
 
     const onMessageReceived = useCallback((message) => {
-        addChatMessage({
-            ...message,
-            isMe: false
-        });
-    }, [addChatMessage]);
+        switch (message.type) {
+            case 'message': {
+                addChatMessage({ ...message, isMe: false });
+                break
+            }
+            case 'users-list': {
+                const { users: rawUsers } = message;
+                const users = rawUsers.map(user => ({
+                    id: user.userId,
+                    username: user.username,
+                    status: user.status
+                }));
+
+                dispatch({ type: 'SET_USERS', payload: users });
+                break
+            }
+            case 'user-joined': {
+                const { username, userId, status } = message;
+
+                dispatch({
+                    type: 'ADD_USER',
+                    payload: {
+                        username,
+                        id: userId,
+                        status
+                    }
+                });
+
+                break
+            }
+            case 'user-status-change': {
+                const { userId, status } = message;
+                
+                dispatch({
+                    type: 'SET_USER_STATUS',
+                    payload: {
+                        id: userId,
+                        status
+                    }
+                });
+
+                break;
+            }
+            default:
+                break;
+        }
+
+    }, [addChatMessage, dispatch]);
 
     useEffect(() => {
         if (!chatService.validateConnected()) {
-            chatService.connect(config.SERVER_URL, null, onMessageReceived);
+            chatService.connect(config.WS_URL, username, null, onMessageReceived);
         }
 
         return () => chatService.disconnect();
-    }, [addChatMessage, onMessageReceived]);
+    }, [username, addChatMessage, onMessageReceived]);
 
     return (
         <ChatsContext.Provider
