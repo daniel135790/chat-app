@@ -1,8 +1,14 @@
 let webSocket = null;
 
-const connect = (addr, onConnect, onMessage) => {
+const connect = (addr, username, onConnect, onMessage) => {
     webSocket = new WebSocket(addr);
-    onConnected(onConnect);
+    onConnected(() => {
+        send({ type: 'user-connect', username });
+
+        if (onConnect) {
+            onConnect();
+        }
+    });
     onMessageReceived(onMessage);
 };
 
@@ -11,10 +17,17 @@ const disconnect = () => {
     webSocket = null;
 };
 
+const updateStatus = (status) => {
+    send({
+        type: 'user-status-change',
+        status
+    });
+};
+
 const validateConnected = () => webSocket !== null && webSocket.readyState === WebSocket.OPEN;
 
 const onConnected = (callback) => {
-    if (!validateConnected()) {
+    if (webSocket === null) {
         return false;
     }
 
@@ -52,6 +65,7 @@ const send = (msg) => {
 export default {
     onConnected,
     onDisconnect,
+    updateStatus,
     onMessageReceived,
     send,
     connect,

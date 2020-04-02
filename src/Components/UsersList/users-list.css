@@ -1,0 +1,15 @@
+.users-list {
+    padding: 20px 10px;
+}
+
+.users-list .user {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+}
+
+.users-list .user div:first-child {
+    text-overflow: ellipsis;
+    overflow: unset;
+    width: fit-content;
+}
