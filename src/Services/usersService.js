@@ -6,7 +6,7 @@ const isUsernameExist = async (username) => {
 
     if (response.status !== 404) {
         const resBody = await response.json();
-        return resBody.status === USER_STATUS.ONLINE;
+        return resBody.status !== USER_STATUS.OFFLINE;
     }
 
     return false;
