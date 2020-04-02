@@ -27,7 +27,7 @@ const ChatsProvider = ({ children }) => {
                 break
             }
             case 'users-list': {
-                const { rawUsers } = message;
+                const { users: rawUsers } = message;
                 const users = rawUsers.map(user => ({
                     id: user.userId,
                     username: user.username,
