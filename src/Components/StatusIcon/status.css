@@ -11,3 +11,7 @@
 .status[status="online"] {
     background-color: green;
 }
+
+.status[status="offline"] {
+    background-color: red;
+}

@@ -51,13 +51,6 @@ const ChatsProvider = ({ children }) => {
 
                 break
             }
-            case 'user-left': {
-                const { userId } = message;
-                dispatch({ type: 'REMOVE_USER', payload: userId });
-
-                break;
-            }
-
             case 'user-status-change': {
                 const { userId, status } = message;
                 
@@ -79,7 +72,7 @@ const ChatsProvider = ({ children }) => {
 
     useEffect(() => {
         if (!chatService.validateConnected()) {
-            chatService.connect(config.SERVER_URL, username, null, onMessageReceived);
+            chatService.connect(config.WS_URL, username, null, onMessageReceived);
         }
 
         return () => chatService.disconnect();
