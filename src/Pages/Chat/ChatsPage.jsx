@@ -5,6 +5,7 @@ import { chatService } from '../../Services';
 import { ChatsList, MessageInput } from './Components';
 import { USER_STATUS } from '../../Constants';
 import IdleTimer from 'react-idle-timer'
+import config from '../../config';
 import './chat-page.css';
 
 const ChatsPage = () => {
@@ -52,7 +53,7 @@ const ChatsPage = () => {
 
     return (
         <IdleTimer
-            timeout={1000 * 60 * 3}
+            timeout={config.AWAY_TIMEOUT}
             onIdle={onUserAway}
             onActive={onUserActive}
         >

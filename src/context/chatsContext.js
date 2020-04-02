@@ -21,54 +21,58 @@ const ChatsProvider = ({ children }) => {
     }, [setChatMessages]);
 
     const onMessageReceived = useCallback((message) => {
-        if (message.type === 'message') {
-            addChatMessage({
-                ...message,
-                isMe: false
-            });
-        }
-
-        if (message.type === 'users-list') {
-            const { users } = message;
-            dispatch({
-                type: 'SET_USERS',
-                payload: users.map(user => ({
+        switch (message.type) {
+            case 'message': {
+                addChatMessage({ ...message, isMe: false });
+                break
+            }
+            case 'users-list': {
+                const { rawUsers } = message;
+                const users = rawUsers.map(user => ({
                     id: user.userId,
                     username: user.username,
                     status: user.status
-                }))
-            });
-        }
+                }));
 
-        if (message.type === 'user-joined') {
-            const { username, userId, status } = message;
-            dispatch({
-                type: 'ADD_USER',
-                payload: {
-                    username,
-                    id: userId,
-                    status
-                }
-            });
-        }
+                dispatch({ type: 'SET_USERS', payload: users });
+                break
+            }
+            case 'user-joined': {
+                const { username, userId, status } = message;
 
-        if (message.type === 'user-left') {
-            const { userId } = message;
-            dispatch({
-                type: 'REMOVE_USER',
-                payload: userId
-            });
-        }
+                dispatch({
+                    type: 'ADD_USER',
+                    payload: {
+                        username,
+                        id: userId,
+                        status
+                    }
+                });
 
-        if (message.type === 'user-status-change') {
-            const { userId, status } = message;
-            dispatch({
-                type: 'SET_USER_STATUS',
-                payload: {
-                    id: userId,
-                    status
-                }
-            });
+                break
+            }
+            case 'user-left': {
+                const { userId } = message;
+                dispatch({ type: 'REMOVE_USER', payload: userId });
+
+                break;
+            }
+
+            case 'user-status-change': {
+                const { userId, status } = message;
+                
+                dispatch({
+                    type: 'SET_USER_STATUS',
+                    payload: {
+                        id: userId,
+                        status
+                    }
+                });
+
+                break;
+            }
+            default:
+                break;
         }
 
     }, [addChatMessage, dispatch]);
