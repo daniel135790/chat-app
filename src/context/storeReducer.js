@@ -11,9 +11,9 @@ const storeReducer = (state, action) => {
             };
         case 'SET_USER_STATUS':
             const usersCopy = state.users;
-            const { id: userId, status } = action.payload;
+            const { username, status } = action.payload;
 
-            const userToUpdate = usersCopy.find(user => user.id === userId);
+            const userToUpdate = usersCopy.find(user => user.username === username);
             userToUpdate.status = status;
 
             return { ...state, users: usersCopy };

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useCallback, useEffect, useState } from 'react';
-import { chatService } from '../Services';
+import { chatService, usersService } from '../Services';
 import { StoreContext } from './storeContext';
 import config from './../config';
 
@@ -26,25 +26,13 @@ const ChatsProvider = ({ children }) => {
                 addChatMessage({ ...message, isMe: false });
                 break
             }
-            case 'users-list': {
-                const { users: rawUsers } = message;
-                const users = rawUsers.map(user => ({
-                    id: user.userId,
-                    username: user.username,
-                    status: user.status
-                }));
-
-                dispatch({ type: 'SET_USERS', payload: users });
-                break
-            }
             case 'user-joined': {
-                const { username, userId, status } = message;
+                const { username, status } = message;
 
                 dispatch({
                     type: 'ADD_USER',
                     payload: {
                         username,
-                        id: userId,
                         status
                     }
                 });
@@ -52,12 +40,12 @@ const ChatsProvider = ({ children }) => {
                 break
             }
             case 'user-status-change': {
-                const { userId, status } = message;
-                
+                const { username, status } = message;
+
                 dispatch({
                     type: 'SET_USER_STATUS',
                     payload: {
-                        id: userId,
+                        username,
                         status
                     }
                 });
@@ -71,12 +59,19 @@ const ChatsProvider = ({ children }) => {
     }, [addChatMessage, dispatch]);
 
     useEffect(() => {
-        if (!chatService.validateConnected()) {
-            chatService.connect(config.WS_URL, username, null, onMessageReceived);
-        }
+        const onStartup = async () => {
+            if (!chatService.validateConnected()) {
+                chatService.connect(config.WS_URL, username, null, onMessageReceived);
+                const currentUsers = await usersService.getUsers();
+
+                dispatch({type: 'SET_USERS', payload: currentUsers})
+            }
+        };
+
+        onStartup();
 
         return () => chatService.disconnect();
-    }, [username, addChatMessage, onMessageReceived]);
+    }, [username, addChatMessage, onMessageReceived, dispatch]);
 
     return (
         <ChatsContext.Provider
