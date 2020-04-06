@@ -5,6 +5,9 @@ const initialState = {
         username: null,
         status: USER_STATUS.OFFLINE
     },
+    currentChat: {
+        partnerUsername: null
+    },
     users: []
 };
 

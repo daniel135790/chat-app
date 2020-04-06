@@ -6,19 +6,33 @@ import config from './../config';
 export const ChatsContext = createContext();
 
 const ChatsProvider = ({ children }) => {
-    const [chatMessages,
-        setChatMessages] = useState([]);
+    const [openChats,
+        setOpenChats] = useState({ global: [] });
 
     const { dispatch, state } = useContext(StoreContext);
     const { currentUser } = state;
     const { username } = currentUser;
 
     const addChatMessage = useCallback((message) => {
-        setChatMessages(currentChats => [
+        const from = message.isPersonal
+            ? message.sender
+            : 'global';
+
+        setOpenChats(currentChats => ({
             ...currentChats,
-            message
-        ]);
-    }, [setChatMessages]);
+            [from]: [
+                ...currentChats[from],
+                message
+            ]
+        }));
+    }, [setOpenChats]);
+
+    const openNewChat = useCallback((partnerUsername) => {
+        setOpenChats(currentChats => ({
+            ...currentChats,
+            [partnerUsername]: []
+        }));
+    }, [setOpenChats]);
 
     const onMessageReceived = useCallback((message) => {
         switch (message.type) {
@@ -64,19 +78,20 @@ const ChatsProvider = ({ children }) => {
                 chatService.connect(config.WS_URL, username, null, onMessageReceived);
                 const currentUsers = await usersService.getUsers();
 
-                dispatch({type: 'SET_USERS', payload: currentUsers})
+                dispatch({ type: 'SET_USERS', payload: currentUsers })
+                currentUsers.filter(user => user.username !== username).map(user => user.username).forEach(openNewChat);
             }
         };
 
         onStartup();
 
         return () => chatService.disconnect();
-    }, [username, addChatMessage, onMessageReceived, dispatch]);
+    }, [username, addChatMessage, onMessageReceived, openNewChat, dispatch]);
 
     return (
         <ChatsContext.Provider
             value={{
-                chats: chatMessages,
+                chats: openChats,
                 addChatMessage
             }}>
             {children}

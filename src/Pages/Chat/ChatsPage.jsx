@@ -1,16 +1,22 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { ChatsContext } from '../../context/chatsContext';
 import { StoreContext } from '../../context/storeContext';
 import { chatService } from '../../Services';
-import { ChatsList, MessageInput } from './Components';
+import { ChatMessagesList, MessageInput } from './Components';
 import './chat-page.css';
 
 const ChatsPage = () => {
-    const { state } = useContext(StoreContext);
+    const { partner } = useParams();
+    const { state, dispatch } = useContext(StoreContext);
     const { addChatMessage } = useContext(ChatsContext);
 
+    useEffect(() => {
+        dispatch({type: 'SET_CURRENT_CHAT_USER', payload: partner || 'global'});
+    }, [partner, dispatch]);
+
     const sendMessage = (messageContent) => {
-        const { username } = state;
+        const { username } = state.currentUser;
 
         const message = {
             type: 'message',
@@ -26,7 +32,7 @@ const ChatsPage = () => {
 
     return (
         <div className="chat-page">
-            <ChatsList />
+            <ChatMessagesList />
             <MessageInput onSend={sendMessage} />
         </div>
     );

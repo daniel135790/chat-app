@@ -19,7 +19,7 @@ const App = () => (
                             <Route exact path="/" component={Pages.Home} />
                             <Route path="/settings" component={Pages.UserSettings} />
                             <Route path="/home" component={Pages.Home} />
-                            <UserRoute path="/chat" component={Pages.Chat} />
+                            <UserRoute path="/chat/:partner?" component={Pages.Chat} />
                             <Route path="*" component={Pages.NotFound} />
                         </Switch>
                     </div>
