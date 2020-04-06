@@ -5,20 +5,34 @@ import { SentimentVerySatisfied } from '@material-ui/icons';
 import { StoreContext } from '../../context/storeContext';
 import StatusIcon from '../StatusIcon';
 import './users-list.css';
+import { ChatsContext } from '../../context/chatsContext';
+import BadgeWrapper from '../BadgeWrapper';
 
 const UsersList = () => {
     const history = useHistory();
     const { state } = useContext(StoreContext);
+    const { chats } = useContext(ChatsContext);
     const { users } = state;
 
-    const onUserClick = username => () => history.push(`/chat/${username}`)
+    const onUserClick = username => () => history.push(`/chat/${username}`);
+
+    const getChatMessagesWithUser = username => chats[username];
+
+    const getUserBadgeContent = (username) => {
+        const chatMessagesWithUser = getChatMessagesWithUser(username);
+        if (chatMessagesWithUser) {
+            return chatMessagesWithUser.length;
+        }
+
+        return 0;
+    };
 
     return (
         <div className="users-list">
             <h3>Current users</h3>
             <List>
                 {users.map(user => (
-                    <ListItem   
+                    <ListItem
                         disableGutters
                         dense
                         button
@@ -26,7 +40,13 @@ const UsersList = () => {
                         onClick={onUserClick(user.username)}
                     >
                         <ListItemAvatar>
-                            <SentimentVerySatisfied />
+                            <BadgeWrapper
+                                badgeContent={getUserBadgeContent(user.username)}
+                                isVisibleBadge={getChatMessagesWithUser(user.username)}
+                                badgeColor="primary"
+                            >
+                                <SentimentVerySatisfied />
+                            </BadgeWrapper>
                         </ListItemAvatar>
                         <ListItemText primary={user.username} />
                         <StatusIcon status={user.status} />

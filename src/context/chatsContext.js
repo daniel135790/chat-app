@@ -78,11 +78,11 @@ const ChatsProvider = ({ children }) => {
                 break;
         }
 
-    }, [addChatMessage, dispatch]);
+    }, [addChatMessage, openNewChat, dispatch]);
 
     useEffect(() => {
         const onStartup = async () => {
-            if (!chatService.validateConnected()) {
+            if (!chatService.validateConnected() && username) {
                 chatService.connect(config.WS_URL, username, null, onMessageReceived);
                 const currentUsers = await usersService.getUsers();
 

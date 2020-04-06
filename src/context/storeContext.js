@@ -1,18 +1,21 @@
 import React, { createContext, useReducer } from 'react';
 import storeReducer from './storeReducer';
 import initialState from './initalState';
+import ChatsContextProvider from './chatsContext';
 
 export const StoreContext = createContext();
 
-const { Provider } = StoreContext;
+const { Provider: StoreContxtProvider } = StoreContext;
 
 const StoreProvider = ({ children }) => {
     const [state, dispatch] = useReducer(storeReducer, initialState)
 
     return (
-        <Provider value={{ state, dispatch }}>
-            {children}
-        </Provider>
+        <StoreContxtProvider value={{ state, dispatch }}>
+            <ChatsContextProvider>
+                {children}
+            </ChatsContextProvider>
+        </StoreContxtProvider>
     );
 };
 
