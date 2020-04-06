@@ -14,7 +14,7 @@ const ChatMessagesList = () => {
         <div className="chat-messages-list">
             {
                 chatMessages
-                    ? chatMessages.map((chatMessage) => (<ChatMessage key={chatMessage.isMe ? Date.now().toString() : chatMessage.id} {...chatMessage} />))
+                    ? chatMessages.map((chatMessage) => (<ChatMessage key={chatMessage.isMe ? Math.random().toString(3) : chatMessage.id} {...chatMessage} />))
                     : 'No Messages'
             }
         </div>

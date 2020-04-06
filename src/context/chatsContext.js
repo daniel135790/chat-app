@@ -14,14 +14,21 @@ const ChatsProvider = ({ children }) => {
     const { username } = currentUser;
 
     const addChatMessage = useCallback((message) => {
-        const from = message.isPersonal
-            ? message.sender
-            : 'global';
+        let chatPartner;
+       
+        if (message.isMe) {
+            chatPartner = message.to;
+        }
+        else {
+            chatPartner = message.isPersonal
+                ? message.sender
+                : 'global';
+        }
 
         setOpenChats(currentChats => ({
             ...currentChats,
-            [from]: [
-                ...currentChats[from],
+            [chatPartner]: [
+                ...currentChats[chatPartner],
                 message
             ]
         }));
@@ -42,6 +49,7 @@ const ChatsProvider = ({ children }) => {
             }
             case 'user-joined': {
                 const { username, status } = message;
+                openNewChat(username);
 
                 dispatch({
                     type: 'ADD_USER',

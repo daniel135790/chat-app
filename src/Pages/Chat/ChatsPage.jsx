@@ -23,6 +23,7 @@ const ChatsPage = () => {
             sender: username,
             timestamp: Date.now(),
             content: messageContent,
+            to: partner,
             isMe: true
         };
 
