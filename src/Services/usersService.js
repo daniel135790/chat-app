@@ -12,6 +12,14 @@ const isUsernameExist = async (username) => {
     return false;
 };
 
+const getUsers = async () => {
+    const response = await fetch(`${config.SERVER_URL}/users`);
+    const resUsers = await response.json();
+
+    return resUsers;
+};
+
 export default {
-    isUsernameExist
+    isUsernameExist,
+    getUsers
 };

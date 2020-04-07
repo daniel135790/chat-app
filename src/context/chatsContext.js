@@ -1,24 +1,47 @@
 import React, { createContext, useContext, useCallback, useEffect, useState } from 'react';
-import { chatService } from '../Services';
+import { chatService, usersService } from '../Services';
 import { StoreContext } from './storeContext';
 import config from './../config';
 
 export const ChatsContext = createContext();
 
 const ChatsProvider = ({ children }) => {
-    const [chatMessages,
-        setChatMessages] = useState([]);
+    const [openChats,
+        setOpenChats] = useState({ global: [] });
 
     const { dispatch, state } = useContext(StoreContext);
     const { currentUser } = state;
     const { username } = currentUser;
 
     const addChatMessage = useCallback((message) => {
-        setChatMessages(currentChats => [
+        let chatPartner;
+        let isRead;
+
+        if (message.isMe) {
+            chatPartner = message.to;
+            isRead = true;
+        }
+        else {
+            chatPartner = message.isPersonal
+                ? message.sender
+                : 'global';
+        }
+
+        setOpenChats(currentChats => ({
             ...currentChats,
-            message
-        ]);
-    }, [setChatMessages]);
+            [chatPartner]: [
+                ...currentChats[chatPartner],
+                { ...message, isRead }
+            ]
+        }));
+    }, [setOpenChats]);
+
+    const openNewChat = useCallback((partnerUsername) => {
+        setOpenChats(currentChats => ({
+            ...currentChats,
+            [partnerUsername]: []
+        }));
+    }, [setOpenChats]);
 
     const onMessageReceived = useCallback((message) => {
         switch (message.type) {
@@ -26,25 +49,14 @@ const ChatsProvider = ({ children }) => {
                 addChatMessage({ ...message, isMe: false });
                 break
             }
-            case 'users-list': {
-                const { users: rawUsers } = message;
-                const users = rawUsers.map(user => ({
-                    id: user.userId,
-                    username: user.username,
-                    status: user.status
-                }));
-
-                dispatch({ type: 'SET_USERS', payload: users });
-                break
-            }
             case 'user-joined': {
-                const { username, userId, status } = message;
+                const { username, status } = message;
+                openNewChat(username);
 
                 dispatch({
                     type: 'ADD_USER',
                     payload: {
                         username,
-                        id: userId,
                         status
                     }
                 });
@@ -52,12 +64,12 @@ const ChatsProvider = ({ children }) => {
                 break
             }
             case 'user-status-change': {
-                const { userId, status } = message;
-                
+                const { username, status } = message;
+
                 dispatch({
                     type: 'SET_USER_STATUS',
                     payload: {
-                        id: userId,
+                        username,
                         status
                     }
                 });
@@ -68,21 +80,37 @@ const ChatsProvider = ({ children }) => {
                 break;
         }
 
-    }, [addChatMessage, dispatch]);
+    }, [addChatMessage, openNewChat, dispatch]);
+
+    const setChatMessagesRead = useCallback((partnerUsername, isRead) => {
+        setOpenChats(currentChats => ({
+            ...currentChats,
+            [partnerUsername]: currentChats[partnerUsername].map(message => ({ ...message, isRead }))
+        }));
+    }, [setOpenChats]);
 
     useEffect(() => {
-        if (!chatService.validateConnected()) {
-            chatService.connect(config.WS_URL, username, null, onMessageReceived);
-        }
+        const onStartup = async () => {
+            if (!chatService.validateConnected() && username) {
+                chatService.connect(config.WS_URL, username, null, onMessageReceived);
+                const currentUsers = await usersService.getUsers();
+
+                dispatch({ type: 'SET_USERS', payload: currentUsers })
+                currentUsers.filter(user => user.username !== username).map(user => user.username).forEach(openNewChat);
+            }
+        };
+
+        onStartup();
 
         return () => chatService.disconnect();
-    }, [username, addChatMessage, onMessageReceived]);
+    }, [username, addChatMessage, onMessageReceived, openNewChat, dispatch]);
 
     return (
         <ChatsContext.Provider
             value={{
-                chats: chatMessages,
-                addChatMessage
+                chats: openChats,
+                addChatMessage,
+                setChatMessagesRead
             }}>
             {children}
         </ChatsContext.Provider>

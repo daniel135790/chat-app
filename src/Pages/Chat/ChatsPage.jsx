@@ -1,25 +1,38 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { ChatsContext } from '../../context/chatsContext';
 import { StoreContext } from '../../context/storeContext';
+import storeSelectors from '../../context/chatSelectors';
 import { chatService } from '../../Services';
-import { ChatsList, MessageInput } from './Components';
-import { USER_STATUS } from '../../Constants';
-import IdleTimer from 'react-idle-timer'
-import config from '../../config';
+import { ChatMessagesList, MessageInput } from './Components';
 import './chat-page.css';
 
 const ChatsPage = () => {
+    const { partner: partnerParam } = useParams();
     const { state, dispatch } = useContext(StoreContext);
-    const { addChatMessage } = useContext(ChatsContext);
+    const { addChatMessage, setChatMessagesRead, chats } = useContext(ChatsContext);
+    
+    const partner = partnerParam || 'global';
+    const chatMessagesCount = storeSelectors.getChatMessagesCount({chats, username: partner});
+
+    useEffect(() => {
+        dispatch({ type: 'SET_CURRENT_CHAT_USER', payload: partner });
+    }, [partner, dispatch]);
+
+    useEffect(() => {
+        setChatMessagesRead(partner, true);
+    }, [setChatMessagesRead, partner, chatMessagesCount]);
+
 
     const sendMessage = (messageContent) => {
-        const { username } = state;
+        const { username } = state.currentUser;
 
         const message = {
             type: 'message',
             sender: username,
             timestamp: Date.now(),
             content: messageContent,
+            to: partner,
             isMe: true
         };
 
@@ -27,41 +40,11 @@ const ChatsPage = () => {
         addChatMessage(message);
     };
 
-    const onUserAway = () => {
-        dispatch({
-            type: 'SET_CURRENT_USER',
-            payload: {
-                ...state.currentUser,
-                status: USER_STATUS.AWAY
-            }
-        });
-
-        chatService.updateStatus(USER_STATUS.AWAY);
-    };
-
-    const onUserActive = () => {
-        dispatch({
-            type: 'SET_CURRENT_USER',
-            payload: {
-                ...state.currentUser,
-                status: USER_STATUS.ONLINE
-            }
-        });
-
-        chatService.updateStatus(USER_STATUS.ONLINE);
-    }
-
     return (
-        <IdleTimer
-            timeout={config.AWAY_TIMEOUT}
-            onIdle={onUserAway}
-            onActive={onUserActive}
-        >
-            <div className="chat-page">
-                <ChatsList />
-                <MessageInput onSend={sendMessage} />
-            </div>
-        </IdleTimer>
+        <div className="chat-page">
+            <ChatMessagesList />
+            <MessageInput onSend={sendMessage} />
+        </div>
     );
 };
 

@@ -13,8 +13,10 @@ const connect = (addr, username, onConnect, onMessage) => {
 };
 
 const disconnect = () => {
-    webSocket.close();
-    webSocket = null;
+    if (webSocket) {
+        webSocket.close();
+        webSocket = null;
+    }
 };
 
 const updateStatus = (status) => {
