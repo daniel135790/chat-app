@@ -1,6 +1,6 @@
 import React, { createContext, useReducer } from 'react';
 import storeReducer from './storeReducer';
-import initialState from './initalState';
+import initialState from './initialState';
 import ChatsContextProvider from './chatsContext';
 
 export const StoreContext = createContext();

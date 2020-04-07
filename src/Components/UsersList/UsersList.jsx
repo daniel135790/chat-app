@@ -4,9 +4,9 @@ import { List, ListItem, ListItemAvatar, ListItemText } from '@material-ui/core'
 import { SentimentVerySatisfied } from '@material-ui/icons';
 import { StoreContext } from '../../context/storeContext';
 import StatusIcon from '../StatusIcon';
-import './users-list.css';
 import { ChatsContext } from '../../context/chatsContext';
 import BadgeWrapper from '../BadgeWrapper';
+import './users-list.css';
 
 const UsersList = () => {
     const history = useHistory();
@@ -21,7 +21,7 @@ const UsersList = () => {
     const getUserBadgeContent = (username) => {
         const chatMessagesWithUser = getChatMessagesWithUser(username);
         if (chatMessagesWithUser) {
-            return chatMessagesWithUser.length;
+            return chatMessagesWithUser.filter(message => !message.isRead).length;
         }
 
         return 0;
@@ -38,6 +38,7 @@ const UsersList = () => {
                         button
                         key={user.username}
                         onClick={onUserClick(user.username)}
+                        selected={state.currentChat.partnerUsername === user.username}
                     >
                         <ListItemAvatar>
                             <BadgeWrapper

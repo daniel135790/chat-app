@@ -6,7 +6,7 @@ const initialState = {
         status: USER_STATUS.OFFLINE
     },
     currentChat: {
-        partnerUsername: null
+        partnerUsername: 'global'
     },
     users: []
 };

@@ -15,9 +15,11 @@ const ChatsProvider = ({ children }) => {
 
     const addChatMessage = useCallback((message) => {
         let chatPartner;
-       
+        let isRead;
+
         if (message.isMe) {
             chatPartner = message.to;
+            isRead = true;
         }
         else {
             chatPartner = message.isPersonal
@@ -29,7 +31,7 @@ const ChatsProvider = ({ children }) => {
             ...currentChats,
             [chatPartner]: [
                 ...currentChats[chatPartner],
-                message
+                { ...message, isRead }
             ]
         }));
     }, [setOpenChats]);
@@ -80,6 +82,13 @@ const ChatsProvider = ({ children }) => {
 
     }, [addChatMessage, openNewChat, dispatch]);
 
+    const setChatMessagesRead = useCallback((partnerUsername, isRead) => {
+        setOpenChats(currentChats => ({
+            ...currentChats,
+            [partnerUsername]: currentChats[partnerUsername].map(message => ({ ...message, isRead }))
+        }));
+    }, [setOpenChats]);
+
     useEffect(() => {
         const onStartup = async () => {
             if (!chatService.validateConnected() && username) {
@@ -100,7 +109,8 @@ const ChatsProvider = ({ children }) => {
         <ChatsContext.Provider
             value={{
                 chats: openChats,
-                addChatMessage
+                addChatMessage,
+                setChatMessagesRead
             }}>
             {children}
         </ChatsContext.Provider>

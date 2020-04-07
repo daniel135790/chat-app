@@ -2,18 +2,27 @@ import React, { useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { ChatsContext } from '../../context/chatsContext';
 import { StoreContext } from '../../context/storeContext';
+import storeSelectors from '../../context/chatSelectors';
 import { chatService } from '../../Services';
 import { ChatMessagesList, MessageInput } from './Components';
 import './chat-page.css';
 
 const ChatsPage = () => {
-    const { partner } = useParams();
+    const { partner: partnerParam } = useParams();
     const { state, dispatch } = useContext(StoreContext);
-    const { addChatMessage } = useContext(ChatsContext);
+    const { addChatMessage, setChatMessagesRead, chats } = useContext(ChatsContext);
+    
+    const partner = partnerParam || 'global';
+    const chatMessagesCount = storeSelectors.getChatMessagesCount({chats, username: partner});
 
     useEffect(() => {
-        dispatch({type: 'SET_CURRENT_CHAT_USER', payload: partner || 'global'});
+        dispatch({ type: 'SET_CURRENT_CHAT_USER', payload: partner });
     }, [partner, dispatch]);
+
+    useEffect(() => {
+        setChatMessagesRead(partner, true);
+    }, [setChatMessagesRead, partner, chatMessagesCount]);
+
 
     const sendMessage = (messageContent) => {
         const { username } = state.currentUser;
